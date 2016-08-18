@@ -1,0 +1,122 @@
+%% -*- mode: erlang -*-
+
+-module(index).
+-include_lib("nitrogen_core/include/wf.hrl").
+-export([main/0, title/0, body/0, wait_for_updates/0,event/1]).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                Page
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+main() -> #template { file={{name}}:template("index.html") }.
+
+title() -> "Welcome to {{name}}.".
+
+body() ->
+	B= [ #span { text="Trigger result: " },
+		  #span { id=triggerval, text="N/A",
+					 style="width: 100px;" },
+		  binding_table()
+		],
+	start_comet(),
+	B.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                Binding
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+data() -> [
+  ["Aug 12", "Author 1", "Description 1", {edit, 1}, {del, 1}],
+  ["Aug 13", "Author 2", "Description 2", {edit, 2}, {del, 2}],
+  ["Aug 14", "Author 3", "Description 3", {edit, 3}, {del, 3}],
+  ["Aug 15", "Author 4", "Description 4", {edit, 4}, {del, 4}],
+  ["Aug 16", "Author 5", "Description 5", {edit, 5}, {del, 5}]
+].
+
+map() ->
+	[
+	 dateLabel@text,
+	 authorLabel@text,
+	 descriptionLabel@text,
+	 ac_edit@postback,
+	 ac_del@postback
+	].
+
+alternate_color(DataRow, Acc) when Acc == []; Acc==odd ->
+	%Data   , new acc,  additional map bindings
+	{DataRow, even, {top@class, "evenrow"}};
+
+alternate_color(DataRow, Acc) when Acc == even ->
+	{DataRow, odd, {top@class, "oddrow"}}.
+
+binding_table() ->
+	[ <<"<style>
+        	  .oddrow { background-color: #8ba6ca;  }
+			  .evenrow { background-color: #fff1d2;  }
+			  th { font-size: 1.2em; }
+	  </style>">>,
+	  #table { class=tiny, rows=[
+		  #tablerow { cells=[
+			  #tableheader { text="Date" },
+			  #tableheader { text="Author" },
+			  #tableheader { text="Description" },
+			  #tableheader { },
+			  binding_data() ]}
+		  ]}].
+
+binding_data() ->
+		  #bind { id=binding_data, data=data(), map=map(),
+					 transform=fun alternate_color/2,
+					 body=#tablerow { id=top, cells=[
+					  #tablecell { id=dateLabel },
+					  #tablecell { id=authorLabel },
+					  #tablecell { id=descriptionLabel },
+					  #tablecell { body=[
+                    #link { id=ac_edit, class="glyphicon glyphicon-pencil" },
+                    #link { id=ac_del, class="glyphicon glyphicon-remove" }
+					  ]}
+															  ]}}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                Comet
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+start_comet() ->
+   wf:wire(#comet{
+              scope=global,
+              pool=indexpool,
+              function=fun() -> comet_setup() end,
+              %%This event is fired after reconnection from
+              %%the browser (the page is not reloaded, only
+              %%the event is posted)
+              reconnect_actions=[
+                                 #event{postback={reconnect,indexpool}}
+                                ]
+             }).
+
+comet_setup() ->
+   %Change message key based on trigger from app
+   btune:listen({myapp,fun1}),
+   io:format("Started comet ~p~n",[self()]),
+   wait_for_updates().
+
+wait_for_updates() ->
+   %Change message based on trigger from app
+   receive
+      {myapp, fun1, NewVal} ->
+         wf:update(triggerval,wf:to_list(NewVal)),  %Update text field of triggerval
+         wf:flush();
+      Msg ->
+         io:format("Comet got: ~p~n",[Msg])
+   end,
+   %% Call with ?MODULE: prefix to survive code reloads
+   ?MODULE:wait_for_updates().
+
+event({reconnect,indexpool}) ->
+   wf:update(triggerval,"reconnected"),
+   %%Start comet because we disconnected/server stopped
+   start_comet();
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                Events
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+event({Op, N}) ->
+	wf:wire(#alert{text= atom_to_list(Op) ++ " " ++ integer_to_list(N)}).

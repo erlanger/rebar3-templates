@@ -1,0 +1,58 @@
+%% -*- mode: erlang -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                             LFE Plugins
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% {project_plugins, 
+%  [
+%   {lodox, {git, "git://github.com/lfe-rebar3/lodox.git", {tag, "0.15.0"}}}
+%  ]}.
+% 
+% {plugins, [
+%   {'lfe-compile', {git, "git://github.com/lfe-rebar3/compile", {tag, "0.5.0"}}}
+% ]}.
+% 
+% {provider_hooks, [{pre, [{compile, {lfe, compile}}]}]}.
+% 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                          Deps and hooks
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+{erl_opts, [debug_info, fail_on_warning]}.
+
+{deps, [ 
+         {cowboy,   "1.0.4"}
+%       , {lfe,                 {git, "git://github.com/rvirding/lfe",                 {tag, "1.1.1"}}},
+%       , {lbx,                 {git, "git://github.com/erlanger/lbx",                 {branch, "master"}}},
+       , {simple_bridge,       {git, "git://github.com/nitrogen/simple_bridge",       {tag, "v2.0.1"}}} 
+       , {nprocreg,            {git, "git://github.com/nitrogen/nprocreg",            {tag, "v0.2.1"}}}
+       , {nitrogen_core,       {git, "git://github.com/nitrogen/nitrogen_core",       {ref, "dd93cc1"}}}
+       , {sync,                {git, "git://github.com/rustyio/sync",                 {branch, master}}}  
+]}.
+
+{pre_hooks,  [{compile, "make include/wf.lfe"}]}.
+{post_hooks, [{compile, "cp -r  $REBAR_DEPS_DIR/nitrogen_core/www/* priv/static/nitrogen"}]}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                          Release
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+{relx, [{release, { {{name}}, {semver, ""}},
+         [{{name}}, 
+          %lfe,
+          %btune,
+          cowboy,
+          sasl,
+          syntax_tools,
+          compiler]},
+        {overlay, [{copy, "priv/static", "static"},
+                   {mkdir, "config"},
+                   {template, "config/vm.args", "vm.args"},
+                   {template, "config/{{name}}.config", "config/{{name}}.config"},
+                   {template, "config/simple_bridge.config", "config/simple_bridge.config"},
+                   {template, "config/sync.config", "config/sync.config"}]},
+        {sys_config, "./config/simple_bridge.config"},
+        {vm_args, "./config/vm.args"},
+        {dev_mode, true},
+        {include_erts, false},
+        {extended_start_script, true}]
+}.
+

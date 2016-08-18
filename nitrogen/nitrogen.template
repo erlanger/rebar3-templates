@@ -1,0 +1,83 @@
+%% -*- mode: erlang -*-
+{description, "Create an OTP compliant Nitrogen release"}.
+{variables, [
+             {name, "my_nitrogen_app", "Name of the Nitrogen app."},
+             {desc, "A Nitrogen Application", "App description."},
+             {bind, "0.0.0.0", "IP address to bind"},
+             {port, 3000, "Port to bind"}
+            ]}.
+{dir, "{{name}}"}.
+{dir, "{{name}}/config"}.
+{dir, "{{name}}/src"}.
+{dir, "{{name}}/include"}.
+{dir, "{{name}}/priv"}.
+{dir, "{{name}}/priv/templates"}.
+{dir, "{{name}}/priv/static"}.
+{dir, "{{name}}/priv/static/nitrogen"}.
+{dir, "{{name}}/priv/static/css"}.
+{dir, "{{name}}/priv/static/js"}.
+{dir, "{{name}}/priv/static/js/vendor"}.
+
+{template, "rebar.config_template",
+ "{{name}}/rebar.config"}.
+
+{template, "Makefile",
+ "{{name}}/Makefile"}.
+
+{template, "mkwf.lfe",
+ "{{name}}/mkwf.lfe"}.
+
+{chmod, "{{name}}/mkwf.lfe", 8#755}.
+
+{template, "src/nitrogen_main_handler.erl_template",
+ "{{name}}/src/nitrogen_main_handler.erl"}.
+
+{template, "src/config_handler.erl_template",
+ "{{name}}/src/handlers/{{name}}_config_handler.erl"}.
+
+{template, "src/app.erl_template",
+ "{{name}}/src/{{name}}_app.erl"}.
+
+{template, "src/sup.erl_template",
+ "{{name}}/src/{{name}}_sup.erl"}.
+
+{template, "src/default.erl_template",
+ "{{name}}/src/{{name}}.erl"}.
+
+{template, "src/app.src_template",
+ "{{name}}/src/{{name}}.app.src"}.
+
+{template, "config/vm.args_template",
+ "{{name}}/config/vm.args"}.
+
+{template, "config/simple_bridge.config_template",
+ "{{name}}/config/simple_bridge.config"}.
+
+{template, "config/app.config_template",
+ "{{name}}/config/{{name}}.config"}.
+
+{template, "config/sys.config_template",
+ "{{name}}/config/sys.config"}.
+
+{template, "config/sync.config_template",
+ "{{name}}/config/sync.config"}.
+
+{template, "sample/index.erl_template",
+ "{{name}}/src/index.erl"}.
+
+{template, "sample/index1.lfe",
+ "{{name}}/src/index1.lfe"}.
+
+%% These are from html5boilerplate
+{template, "sample/index.html_template",
+ "{{name}}/priv/templates/index.html"}.
+
+{template, "priv/css/main.css",
+ "{{name}}/priv/static/css/main.css"}.
+
+{template, "priv/js/main.js",
+ "{{name}}/priv/static/js/main.js"}.
+
+{template, "priv/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js",
+ "{{name}}/priv/static/js/vendor/modernizr-respond.min.js"}.
+
