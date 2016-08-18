@@ -1,0 +1,17 @@
+{application, {{name}},
+ [{description, "{{desc}}"},
+  {vsn, git},
+  {registered, []},
+  {mod, { {{name}}, []}},
+  {applications,
+   [kernel,
+    stdlib,
+    lfe,
+    btune
+   ]},
+  {env,[]},
+  {modules, []},
+  {maintainers, []},
+  {licenses, []},
+  {links, []}
+ ]}.

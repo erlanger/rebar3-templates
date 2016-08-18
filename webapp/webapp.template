@@ -1,0 +1,160 @@
+%% -*- mode: erlang -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%           Complete Web app
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+{description, "Create a complete webapp with a nitrogen front-end in erlang, and an LFE backend."}.
+
+{variables, [
+             {name, "webapp", "Name of the webapp."},
+             {desc, "Complete webapp with nitrogen front-end and LFE back-end", "Webapp description."},
+%             {nameF, "{{name}}fe", "Name of the front-end erlang nitrogen app."},
+%             {nameB, "{{name}}be", "Name of the back-end lfe server."},
+%             {descF, "Front-end for {{name}}", "Front-end app description."},
+%             {descB, "Back-end for {{name}}", "Back-end app description."},
+             {bind, "0.0.0.0", "IP address to bind"},
+             {port, 3000, "Port to bind"}
+            ]}.
+
+{dir, "{{name}}/apps"}.
+%{dir, "{{name}}/apps/{{nameB}}"}.
+%{dir, "{{name}}/apps/{{nameF}}"}.
+{dir, "{{name}}/config"}.
+
+{file, "LICENSE", "{{name}}/LICENSE"}.
+
+{template, "rebar.config",
+ "{{name}}/rebar.config"}.
+
+{template, "Makefile",
+  "{{name}}/Makefile"}.
+
+{template, "README.md",
+  "{{name}}/README.md"}.
+
+{template, "config/sys.config",
+  "{{name}}/config/sys.config"}.
+
+{template, "config/vm.args",
+  "{{name}}/config/vm.args"}.
+
+{template, "config/sync.config",
+  "{{name}}/config/sync.config"}.
+
+{template, "config/simple_bridge.config",
+  "{{name}}/config/simple_bridge.config"}.
+
+{template, "config/webappfe.config",
+  "{{name}}/config/{{name}}fe.config"}.
+
+{template, "config/webappbe.config",
+  "{{name}}/config/{{name}}be.config"}.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%           Back end LFE server
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  {dir, "{{name}}/apps/{{nameB}}"}.
+%  {dir, "{{name}}/apps/{{nameB}}/test"}.
+%  {dir, "{{name}}/apps/{{nameB}}/src"}.
+%  {dir, "{{name}}/apps/{{nameB}}/config"}.
+%  {dir, "{{name}}/apps/{{nameB}}/doc"}.
+%  {dir, "{{name}}/apps/{{nameB}}/priv"}.
+%
+%  %% Project dir
+%  {file, "apps/B/LICENSE", "apps/{{nameB}}/LICENSE"}.
+%
+%  {template, "apps/B/B/Makefile",
+%    "{{name}}/apps/{{nameB}}/Makefile"}.
+%
+%  {template, "apps/B/README.md",
+%    "{{name}}/apps/{{nameB}}/README.md"}.
+%
+%  {template, "apps/B/rebar.config",
+%   "{{name}}/apps/{{nameB}}/rebar.config"}.
+%
+%  %% src dir
+%  {template, "apps/B/src/lfeapp.app.src",
+%   "{{name}}/apps/{{nameB}}/src/{{nameB}}.app.src"}.
+%
+%  {template, "apps/B/src/lfeapp.lfe",
+%   "{{name}}/apps/{{nameB}}/src/{{nameB}}_app.lfe"}.
+%
+%  %% test dir
+%  {template, "apps/B/test/lfeapp-tests.lfe",
+%   "{{name}}/apps/{{nameB}}/test/{{nameB}}-tests.lfe"}.
+%
+%  %% config dir
+%  {template, "apps/B/config/sys.config",
+%   "{{name}}/apps/{{nameB}}/config/sys.config"}.
+%
+%  {template, "apps/B/config/vm.args",
+%   "{{name}}/apps/{{nameB}}/config/vm.args"}.
+%
+%  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  %           Front end nitrogen web app
+%  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  {dir, "{{name}}/apps/{{nameF}}"}.
+%  {dir, "{{name}}/apps/{{nameF}}/config"}.
+%  {dir, "{{name}}/apps/{{nameF}}/src"}.
+%  {dir, "{{name}}/apps/{{nameF}}/priv"}.
+%  {dir, "{{name}}/apps/{{nameF}}/priv/templates"}.
+%  {dir, "{{name}}/apps/{{nameF}}/priv/static"}.
+%  {dir, "{{name}}/apps/{{nameF}}/priv/static/nitrogen"}.
+%  {dir, "{{name}}/apps/{{nameF}}/priv/static/css"}.
+%  {dir, "{{name}}/apps/{{nameF}}/priv/static/js"}.
+%  {dir, "{{name}}/apps/{{nameF}}/priv/static/js/vendor"}.
+%
+%  {template, "apps/F/rebar.config_template",
+%   "{{name}}/apps/{{nameF}}/rebar.config"}.
+%
+%  {template, "apps/F/Makefile",
+%   "{{name}}/apps/{{nameF}}/Makefile"}.
+%
+%  {template, "apps/F/src/nitrogen_main_handler.erl_template",
+%   "{{name}}/apps/{{nameF}}/src/nitrogen_main_handler.erl"}.
+%
+%  {template, "apps/F/src/config_handler.erl_template",
+%   "{{name}}/apps/{{nameF}}/src/handlers/apps/{{nameF}}_config_handler.erl"}.
+%
+%  {template, "apps/F/src/app.erl_template",
+%   "{{name}}/apps/{{nameF}}/src/apps/{{nameF}}_app.erl"}.
+%
+%  {template, "apps/F/src/sup.erl_template",
+%   "{{name}}/apps/{{nameF}}/src/apps/{{nameF}}_sup.erl"}.
+%
+%  {template, "apps/F/src/default.erl_template",
+%   "{{name}}/apps/{{nameF}}/src/apps/{{nameF}}.erl"}.
+%
+%  {template, "apps/F/src/app.src_template",
+%   "{{name}}/apps/{{nameF}}/src/apps/{{nameF}}.app.src"}.
+%
+%  {template, "apps/F/config/vm.args_template",
+%   "{{name}}/apps/{{nameF}}/config/vm.args"}.
+%
+%  {template, "apps/F/config/simple_bridge.config_template",
+%   "{{name}}/apps/{{nameF}}/config/simple_bridge.config"}.
+%
+%  {template, "apps/F/config/app.config_template",
+%   "{{name}}/apps/{{nameF}}/config/{{nameF}}.config"}.
+%
+%  {template, "apps/F/config/sys.config_template",
+%   "{{name}}/apps/{{nameF}}/config/sys.config"}.
+%
+%  {template, "apps/F/config/sync.config_template",
+%   "{{name}}/apps/{{nameF}}/config/sync.config"}.
+%
+%  {template, "apps/F/sample/index.erl_template",
+%   "{{name}}/apps/{{nameF}}/src/index.erl"}.
+%
+%  %% These are from html5boilerplate
+%  {template, "apps/F/sample/index.html_template",
+%   "{{name}}/apps/{{nameF}}/priv/templates/index.html"}.
+%
+%  {template, "apps/F/priv/css/main.css",
+%   "{{name}}/apps/{{nameF}}/priv/static/css/main.css"}.
+%
+%  {template, "apps/F/priv/js/main.js",
+%   "{{name}}/apps/{{nameF}}/priv/static/js/main.js"}.
+%
+%  {template, "apps/F/priv/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js",
+%   "{{name}}/apps/{{nameF}}/priv/static/js/vendor/modernizr-respond.min.js"}.
+%

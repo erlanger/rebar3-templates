@@ -1,0 +1,43 @@
+%% -*- mode: erlang -*-
+{description, "OTP Compliant LFE application with supervision tree, gen_server, and test cases"}.
+{variables, [
+             {name, "myapp", "Name of the LFE app."},
+             {desc, "LFE Application", "App description."}
+            ]}.
+
+{dir, "{{name}}"}.
+{dir, "{{name}}/test"}.
+{dir, "{{name}}/src"}.
+{dir, "{{name}}/config"}.
+{dir, "{{name}}/doc"}.
+{dir, "{{name}}/priv"}.
+
+%% Project dir
+{file, "LICENSE", "{{name}}/LICENSE"}.
+
+{template, "Makefile",
+  "{{name}}/Makefile"}.
+
+{template, "README.md",
+  "{{name}}/README.md"}.
+
+{template, "rebar.config",
+ "{{name}}/rebar.config"}.
+
+%% src dir
+{template, "src/lfeapp.app.src",
+ "{{name}}/src/{{name}}.app.src"}.
+
+{template, "src/lfeapp.lfe",
+ "{{name}}/src/{{name}}_app.lfe"}.
+
+%% test dir
+{template, "test/lfeapp-tests.lfe",
+ "{{name}}/test/{{name}}-tests.lfe"}.
+
+%% config dir
+{template, "config/sys.config",
+ "{{name}}/config/sys.config"}.
+
+{template, "config/vm.args",
+ "{{name}}/config/vm.args"}.
