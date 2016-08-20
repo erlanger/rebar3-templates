@@ -20,7 +20,8 @@
 {erl_opts, [debug_info, fail_on_warning]}.
 
 {deps, [ 
-         {cowboy,   "1.0.4"}
+         {ranch,    "1.0.0"} %We use ranch 1.0 because 1.2.1 has a problem stopping with q().
+       , {cowboy,   "1.0.4"}
 %       , {lfe,                 {git, "git://github.com/rvirding/lfe",                 {tag, "1.1.1"}}},
 %       , {lbx,                 {git, "git://github.com/erlanger/lbx",                 {branch, "master"}}},
        , {simple_bridge,       {git, "git://github.com/nitrogen/simple_bridge",       {tag, "v2.0.1"}}} 
